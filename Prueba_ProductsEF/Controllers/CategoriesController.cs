@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Prueba_ProductsEF.Dtos;
+using Prueba_ProductsEF.Models;
 
 namespace Prueba_ProductsEF.Controllers
 {
@@ -17,8 +18,8 @@ namespace Prueba_ProductsEF.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories()
         {
-            var products = await _service.GetCategoriesAsync();
-            return Ok(products);
+            var categories = await _service.GetCategoriesAsync();
+            return Ok(new APIResponse(true, "Categories successfuly found", categories));
         }
     }
 }

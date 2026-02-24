@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Prueba_productsEF.Models;
 using Prueba_ProductsEF.Dtos;
+using Prueba_ProductsEF.Models;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 [ApiController]
@@ -18,7 +20,7 @@ public class ProductsControllerEF : ControllerBase
     public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
     {
         var products = await _service.GetProductsAsync();
-        return Ok(products);
+        return Ok(new APIResponse(true, "Products successfuly found"));
 
     }
 
@@ -34,8 +36,8 @@ public class ProductsControllerEF : ControllerBase
     {
         var prod = await _service.GetProductByIdAsync(id);
         if (prod == null)
-            return NotFound(new { message = "Producto no encontrado" });
-        return Ok(prod);
+            return NotFound(new APIResponse(false, "Product not found"));
+        return Ok(new APIResponse(true, "Product successfuly found", prod));
     }
 
     [HttpPost]
@@ -44,11 +46,11 @@ public class ProductsControllerEF : ControllerBase
         try
         {
             var newProd = await _service.AddProductAsync(prod);
-            return CreatedAtAction(nameof(GetProduct), new { id = newProd.Id }, newProd);
+            return Ok(new APIResponse(true, "Product successfuly added", newProd));
         }
         catch (Exception ex)
         {
-            return BadRequest(new { message = ex.Message });
+            return BadRequest(new APIResponse(false, ex.Message));
         }
     }
 
@@ -59,14 +61,14 @@ public class ProductsControllerEF : ControllerBase
         {
             var updateProd = await _service.UpdateProductAsync(id, inputProduct);
             if (updateProd == null)
-                return NotFound(new { message = "Producto no encontrado" });
+                return NotFound(new APIResponse(false, "Product not found"));
 
-            return Ok(updateProd);
+            return Ok(new APIResponse(true, "Product successfuly updated", updateProd));
 
         }
         catch (Exception ex)
         {
-            return BadRequest(new { message = ex.Message });
+            return BadRequest(new APIResponse(false, ex.Message));
         }
     }
 
@@ -77,14 +79,14 @@ public class ProductsControllerEF : ControllerBase
         {
             var delProd = await _service.DeleteProductAsync(id);
             if (!delProd)
-                return NotFound(new { message = "Producto no encontrado" });
+                return NotFound(new APIResponse(false, "Product not found"));
 
-            return NoContent();
+            return Ok(new APIResponse(true, "Product successfuly deleted"));
 
         }
         catch (Exception ex)
         {
-            return BadRequest(new { message = ex.Message });
+            return BadRequest(new APIResponse(false, ex.Message));
         }
     }
 }
