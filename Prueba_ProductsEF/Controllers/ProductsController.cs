@@ -20,7 +20,7 @@ public class ProductsControllerEF : ControllerBase
     public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
     {
         var products = await _service.GetProductsAsync();
-        return Ok(new APIResponse(true, "Products successfuly found"));
+        return Ok(new APIResponse(true, "Products successfuly found", products));
 
     }
 
