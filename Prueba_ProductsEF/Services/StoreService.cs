@@ -83,7 +83,7 @@ namespace Prueba_ProductsEF.Services
             var store = await _repo.GetStoreByIdAsync(id);
             if (store == null)
             {
-                throw new Exception("La categoría no existe.");
+                throw new Exception("La tienda no existe.");
             }
 
             store.Name = storeDto.Name;

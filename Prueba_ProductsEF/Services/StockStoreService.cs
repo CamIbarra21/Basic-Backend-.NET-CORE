@@ -6,7 +6,7 @@ public interface IStockStoreService
     Task<IEnumerable<StockStoreDto>> GetStockStoresAsync();
     Task<StockStoreDto?> GetStockStoreByIdAsync(int id);
     Task<StockStoreDto?> AddStockStoreAsync(StockStoreDto stockStoreDto);
-    Task<StockStoreDto?> UpdateStockStoreAsync(StockStoreDto stockStoreDto);
+    Task<StockStoreDto?> UpdateStockStoreAsync(int id, StockStoreDto stockStoreDto);
     Task<bool> DeleteStockStoreAsync(int id);
 }
 
@@ -68,20 +68,22 @@ namespace Prueba_ProductsEF.Services
 
             await _repo.AddStockStoreAsync(stockStore);
 
+            var savedStockStore = await _repo.GetStockStoreByIdAsync(stockStore.Id);
+
             return new StockStoreDto
             {
-                Id = stockStore.Id,
-                StoreId = stockStore.StoreId,
-                StoreName = stockStore.Store.Name,
-                ProductId = stockStore.ProductId,
-                ProductName = stockStore.Product.Name,
-                Quantity = stockStore.Quantity
+                Id = savedStockStore.Id,
+                StoreId = savedStockStore.StoreId,
+                StoreName = savedStockStore.Store.Name,
+                ProductId = savedStockStore.ProductId,
+                ProductName = savedStockStore.Product.Name,
+                Quantity = savedStockStore.Quantity
             };
         }
 
-        public async Task<StockStoreDto?> UpdateStockStoreAsync(StockStoreDto stockStoreDto)
+        public async Task<StockStoreDto?> UpdateStockStoreAsync(int id, StockStoreDto stockStoreDto)
         {
-            var stockStore = await _repo.GetStockStoreByIdAsync(stockStoreDto.Id);
+            var stockStore = await _repo.GetStockStoreByIdAsync(id);
             if (stockStore == null)
                 throw new Exception("El stock para la tienda no existe");
 
