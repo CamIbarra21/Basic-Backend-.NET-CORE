@@ -43,50 +43,28 @@ public class ProductsControllerEF : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ProductDto>> AddProduct(ProductDto prod)
     {
-        try
-        {
-            var newProd = await _service.AddProductAsync(prod);
-            return Ok(new APIResponse(true, "Product successfuly added", newProd));
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new APIResponse(false, ex.Message));
-        }
+        var newProd = await _service.AddProductAsync(prod);
+        return Ok(new APIResponse(true, "Product successfuly added", newProd));
     }
+
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateProduct(int id, ProductDto inputProduct)
     {
-        try
-        {
-            var updateProd = await _service.UpdateProductAsync(id, inputProduct);
-            if (updateProd == null)
-                return NotFound(new APIResponse(false, "Product not found"));
+        var updateProd = await _service.UpdateProductAsync(id, inputProduct);
+        if (updateProd == null)
+            return NotFound(new APIResponse(false, "Product not found"));
 
-            return Ok(new APIResponse(true, "Product successfuly updated", updateProd));
-
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new APIResponse(false, ex.Message));
-        }
+        return Ok(new APIResponse(true, "Product successfuly updated", updateProd));
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProduct(int id)
     {
-        try
-        {
-            var delProd = await _service.DeleteProductAsync(id);
-            if (!delProd)
-                return NotFound(new APIResponse(false, "Product not found"));
+        var delProd = await _service.DeleteProductAsync(id);
+        if (!delProd)
+            return NotFound(new APIResponse(false, "Product not found"));
 
-            return Ok(new APIResponse(true, "Product successfuly deleted"));
-
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new APIResponse(false, ex.Message));
-        }
+        return Ok(new APIResponse(true, "Product successfuly deleted"));
     }
 }

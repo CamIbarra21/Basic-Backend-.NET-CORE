@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Prueba_productsEF.Contexts;
+using Prueba_ProductsEF.Middleware;
 using Prueba_ProductsEF.Repositories;
 using Prueba_ProductsEF.Services;
 
@@ -23,6 +24,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
+
+app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
