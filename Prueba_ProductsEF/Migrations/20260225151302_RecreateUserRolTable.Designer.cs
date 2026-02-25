@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Prueba_productsEF.Contexts;
 
@@ -10,9 +11,11 @@ using Prueba_productsEF.Contexts;
 namespace Prueba_ProductsEF.Migrations
 {
     [DbContext(typeof(ProductDb))]
-    partial class ProductDbModelSnapshot : ModelSnapshot
+    [Migration("20260225151302_RecreateUserRolTable")]
+    partial class RecreateUserRolTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,20 +60,26 @@ namespace Prueba_ProductsEF.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("temp")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Rol");
+                    b.ToTable("Rols");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            Name = "Admin"
+                            Name = "Admin",
+                            temp = "xd"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Manager"
+                            Name = "Manager",
+                            temp = "xd"
                         });
                 });
 
@@ -167,11 +176,15 @@ namespace Prueba_ProductsEF.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("temp")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RolId");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Prueba_productsEF.Models.Product", b =>

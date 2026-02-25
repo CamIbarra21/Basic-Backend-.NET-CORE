@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Prueba_productsEF.Contexts;
 
@@ -10,9 +11,11 @@ using Prueba_productsEF.Contexts;
 namespace Prueba_ProductsEF.Migrations
 {
     [DbContext(typeof(ProductDb))]
-    partial class ProductDbModelSnapshot : ModelSnapshot
+    [Migration("20260225151537_RemoveTempFields")]
+    partial class RemoveTempFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

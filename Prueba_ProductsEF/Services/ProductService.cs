@@ -140,7 +140,7 @@ namespace Prueba_ProductsEF.Services
                 HasStock = product.StockStores != null && product.StockStores.Sum(ss => ss.Quantity) > 0,
                 Price = product.Price,
                 ImageLink = product.ImageLink,
-                Category = (await _repoCategory.GetCategoryByIdAsync(product.CategoryId))?.Name ?? "Desconocida"
+                Category = (await _repoCategory.GetCategoryByIdAsync(product.CategoryId))?.Name ?? "General"
             };
         }
 
