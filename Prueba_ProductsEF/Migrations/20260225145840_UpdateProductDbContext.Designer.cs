@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Prueba_productsEF.Contexts;
 
@@ -10,9 +11,11 @@ using Prueba_productsEF.Contexts;
 namespace Prueba_ProductsEF.Migrations
 {
     [DbContext(typeof(ProductDb))]
-    partial class ProductDbModelSnapshot : ModelSnapshot
+    [Migration("20260225145840_UpdateProductDbContext")]
+    partial class UpdateProductDbContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,7 +62,7 @@ namespace Prueba_ProductsEF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Rol");
+                    b.ToTable("Rols");
 
                     b.HasData(
                         new
@@ -171,7 +174,7 @@ namespace Prueba_ProductsEF.Migrations
 
                     b.HasIndex("RolId");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Prueba_productsEF.Models.Product", b =>

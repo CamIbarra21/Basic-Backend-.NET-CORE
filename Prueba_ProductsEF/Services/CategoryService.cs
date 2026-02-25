@@ -82,7 +82,6 @@ namespace Prueba_ProductsEF.Services
                 throw new Exception("La categoría no existe.");
             }
 
-            category.Id = categoryDto.Id;
             category.Name = categoryDto.Name;
 
             await _repo.UpdateCategoryAsync(category);

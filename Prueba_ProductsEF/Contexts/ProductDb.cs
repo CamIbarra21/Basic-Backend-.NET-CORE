@@ -16,6 +16,8 @@ namespace Prueba_productsEF.Contexts
         public DbSet<Category> Categories { get; set; }
         public DbSet<Store> Stores { get; set; }
         public DbSet<StockStore> StockStores { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Rol> Rols { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,6 +28,11 @@ namespace Prueba_productsEF.Contexts
             //Semilla de datos para la categoría "General"
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "General" }
+            );
+
+            //Semilla de datos para los usuarios "Admin", "Manager"
+            modelBuilder.Entity<Rol>().HasData(
+                new Rol { Id = 1, Name = "Admin" }, new Rol { Id = 2, Name = "Manager" }
             );
         }
     }
