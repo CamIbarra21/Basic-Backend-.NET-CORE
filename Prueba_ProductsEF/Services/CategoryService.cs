@@ -8,7 +8,7 @@ public interface ICategoryService
     Task<CategoryDto?> GetCategoryByIdAsync(int id);
     Task<CategoryDto?> GetCategoryByNameAsync(string name);
     Task<CategoryDto?> AddCategoryAsync(CategoryDto categoryDto);
-    Task<CategoryDto?> UpdateCategoryAsync(CategoryDto categoryDto);
+    Task<CategoryDto?> UpdateCategoryAsync(int id,CategoryDto categoryDto);
     Task<bool> DeleteCategoryAsync(int id);
 }
 
@@ -74,9 +74,9 @@ namespace Prueba_ProductsEF.Services
             };
         }
 
-        public async Task<CategoryDto?> UpdateCategoryAsync(CategoryDto categoryDto)
+        public async Task<CategoryDto?> UpdateCategoryAsync(int id, CategoryDto categoryDto)
         {
-            var category = await _repo.GetCategoryByIdAsync(categoryDto.Id);
+            var category = await _repo.GetCategoryByIdAsync(id);
             if (category == null)
             {
                 throw new Exception("La categoría no existe.");

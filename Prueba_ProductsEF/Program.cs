@@ -14,6 +14,10 @@ builder.Services.AddScoped(typeof(IProductRepository), typeof(ProductRepository)
 builder.Services.AddScoped(typeof(IProductService), typeof(ProductService));
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IStoreRepository, StoreRepository>();
+builder.Services.AddScoped<IStoreService, StoreService>();
+builder.Services.AddScoped<IStockStoreRepository, StockStoreRepository>();
+builder.Services.AddScoped<IStockStoreService, StockStoreService>();
 
 builder.Services.AddControllers();
 

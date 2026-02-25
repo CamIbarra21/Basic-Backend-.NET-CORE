@@ -6,7 +6,7 @@ public interface IStoreService
     Task<IEnumerable<StoreDto>> GetStoresAsync();
     Task<StoreDto?> GetStoreByIdAsync(int id);
     Task<StoreDto?> AddStoreAsync(StoreDto store);
-    Task<StoreDto?> UpdateStoreAsync(StoreDto store);
+    Task<StoreDto?> UpdateStoreAsync(int id, StoreDto store);
     Task<bool> DeleteStoreAsync(int id);
 }
 
@@ -78,12 +78,12 @@ namespace Prueba_ProductsEF.Services
             };
         }
 
-        public async Task<StoreDto?> UpdateStoreAsync(StoreDto storeDto)
+        public async Task<StoreDto?> UpdateStoreAsync(int id, StoreDto storeDto)
         {
-            var store = await _repo.GetStoreByIdAsync(storeDto.Id);
+            var store = await _repo.GetStoreByIdAsync(id);
             if (store == null)
             {
-                throw new Exception("La categoría no existe.");
+                throw new Exception("La tienda no existe.");
             }
 
             store.Name = storeDto.Name;
@@ -92,7 +92,7 @@ namespace Prueba_ProductsEF.Services
             store.OpeningDays = string.Join(',', storeDto.OpeningDays);
             store.OpeningHours = storeDto.OpeningHours;
 
-            await _repo.AddStoreAsync(store);
+            await _repo.UpdateStoreAsync(store);
 
             return new StoreDto
             {

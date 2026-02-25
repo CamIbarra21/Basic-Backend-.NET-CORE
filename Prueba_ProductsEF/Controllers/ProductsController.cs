@@ -24,12 +24,13 @@ public class ProductsControllerEF : ControllerBase
 
     }
 
-    /*
-    [HttpGet("complete")]
-    public async Task<ActionResult<IEnumerable<Product>>> GetCompleteProducts()
+    
+    [HttpGet("hasStock")]
+    public async Task<ActionResult<IEnumerable<Product>>> GetStockProducts()
     {
-        return await _db.Products.Where(p => p.HasStock).ToListAsync();
-    }*/
+        var products = await _service.GetStockProductsAsync();
+        return Ok(new APIResponse(true, "Products with stock successfuly found", products));
+    }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<ProductDto>> GetProduct(int id)
@@ -38,6 +39,13 @@ public class ProductsControllerEF : ControllerBase
         if (prod == null)
             return NotFound(new APIResponse(false, "Product not found"));
         return Ok(new APIResponse(true, "Product successfuly found", prod));
+    }
+
+    [HttpGet("{id}/stock")]
+    public async Task<ActionResult<ProductDto>> GetStockProduct(int id)
+    {
+        var stockProd = await _service.GetStockProductByIdAsync(id);
+        return Ok(new APIResponse(true, "Product with stock successfuly found", stockProd));
     }
 
     [HttpPost]

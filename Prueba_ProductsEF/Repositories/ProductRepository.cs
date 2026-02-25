@@ -23,12 +23,12 @@ namespace Prueba_ProductsEF.Repositories
         }
         public async Task<IEnumerable<Product>> GetProductsAsync()
         {
-            return await _db.Products.Include(p => p.Category).ToListAsync();
+            return await _db.Products.Include(p => p.Category).Include(p => p.StockStores).ToListAsync();
         }
 
         public async Task<Product?> GetProductByIdAsync(int id)
         {
-            return await _db.Products.Include(p => p.Category).FirstOrDefaultAsync(p => p.Id == id);
+            return await _db.Products.Include(p => p.Category).Include(p => p.StockStores).FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task AddProductAsync(Product product)

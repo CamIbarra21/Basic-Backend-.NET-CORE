@@ -6,6 +6,8 @@ public interface IProductService
 {
     Task<IEnumerable<ProductDto>> GetProductsAsync();
     Task<ProductDto?> GetProductByIdAsync(int id);
+    Task<IEnumerable<ProductDto>> GetStockProductsAsync();
+    Task<int> GetStockProductByIdAsync(int id);
     Task<ProductDto?> AddProductAsync(ProductDto productDto);
     Task<ProductDto?> UpdateProductAsync(int id, ProductDto productDto);
     Task<bool> DeleteProductAsync(int id);
@@ -44,7 +46,7 @@ namespace Prueba_ProductsEF.Services
             var product = await _repo.GetProductByIdAsync(id);
             if (product == null)
             {
-                throw new Exception("La categoría no existe.");
+                throw new Exception("El producto no existe.");
             }
 
             return new ProductDto
@@ -57,6 +59,34 @@ namespace Prueba_ProductsEF.Services
                 ImageLink = product.ImageLink,
                 Category = product.Category.Name
             };
+        }
+
+        public async Task<IEnumerable<ProductDto>> GetStockProductsAsync()
+        {
+            var products = await _repo.GetProductsAsync();
+            var productsWithStock = products.Where(p => p.StockStores != null && p.StockStores.Sum(ss => ss.Quantity) > 0);
+
+            return productsWithStock.Select(p => new ProductDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                HasStock = true,
+                ImageLink = p.ImageLink,
+                Category = p.Category.Name
+            });
+        }
+
+        public async Task<int> GetStockProductByIdAsync(int id)
+        {
+            var product = await _repo.GetProductByIdAsync(id);
+            if (product == null)
+            {
+                throw new Exception("El producto no existe.");
+            }
+
+            return product.StockStores != null ? product.StockStores.Sum(ss => ss.Quantity) : 0;
         }
 
         public async Task<ProductDto?> AddProductAsync(ProductDto productDto)
