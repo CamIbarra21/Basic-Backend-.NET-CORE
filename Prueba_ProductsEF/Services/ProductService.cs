@@ -11,6 +11,8 @@ public interface IProductService
     Task<ProductDto?> AddProductAsync(ProductDto productDto);
     Task<ProductDto?> UpdateProductAsync(int id, ProductDto productDto);
     Task<bool> DeleteProductAsync(int id);
+    Task<IEnumerable<ProductDto>> GetProductsPagedAsync(int pageNumber, int pageSize);
+    Task<int> GetCountProductsAsync();
 }
 
 namespace Prueba_ProductsEF.Services 
@@ -155,6 +157,26 @@ namespace Prueba_ProductsEF.Services
             await _repo.DeleteProductAsync(id);
             return true;
 
+        }
+
+        public async Task<IEnumerable<ProductDto>> GetProductsPagedAsync(int pageNumber, int pageSize)
+        {
+            var products = await _repo.GetProductsPagedAsync(pageNumber, pageSize);
+            return products.Select(p => new ProductDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                HasStock = p.StockStores != null && p.StockStores.Sum(ss => ss.Quantity) > 0,
+                ImageLink = p.ImageLink,
+                Category = p.Category.Name
+            });
+        }
+
+        public async Task<int> GetCountProductsAsync()
+        {
+            return await _repo.GetCountProductsAsync();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Prueba_productsEF.Contexts;
 using Prueba_productsEF.Models;
 using Prueba_ProductsEF.Dtos;
 using Prueba_ProductsEF.Models;
@@ -74,5 +75,31 @@ public class ProductsControllerEF : ControllerBase
             return NotFound(new APIResponse(false, "Product not found"));
 
         return Ok(new APIResponse(true, "Product successfuly deleted"));
+    }
+
+    [HttpGet("paged")]
+    public async Task<ActionResult<IEnumerable<ProductDto>>> GetProductsPaged(int pageNumber = 1, int pageSize = 5)
+    {
+        var pagedProducts = await _service.GetProductsPagedAsync(pageNumber, pageSize);
+        if (pagedProducts == null || !pagedProducts.Any())
+            return NotFound(new APIResponse(false, "No products found for the given page"));
+        var totalCount = await _service.GetCountProductsAsync(); // cuenta todos los productos
+
+        var result = new
+        {
+            items = pagedProducts,
+            totalCount,
+            pageNumber,
+            pageSize
+        };
+
+        return Ok(new APIResponse(true, "Products successfuly found", result));
+    }
+
+    [HttpGet("count")]
+    public async Task<ActionResult<int>> GetCountProducts()
+    {
+        var count = await _service.GetCountProductsAsync();
+        return Ok(new APIResponse(true, "Count of products successfuly found", count));
     }
 }
