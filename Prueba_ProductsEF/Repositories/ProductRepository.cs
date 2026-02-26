@@ -9,6 +9,8 @@ public interface IProductRepository
     Task AddProductAsync(Product product);
     Task UpdateProductAsync(Product product);
     Task DeleteProductAsync(int id);
+    Task<IEnumerable<Product>> GetProductsPagedAsync(int pageNumber, int pageSize);
+    Task<int> GetCountProductsAsync();
 }
 
 namespace Prueba_ProductsEF.Repositories
@@ -51,6 +53,20 @@ namespace Prueba_ProductsEF.Repositories
                 _db.Products.Remove(product);
                 await _db.SaveChangesAsync();
             }
+        }
+
+        public async Task<IEnumerable<Product>> GetProductsPagedAsync(int pageNumber, int pageSize)
+        {
+            return await _db.Products.Include(p => p.Category).Include(p => p.StockStores)
+                .OrderBy(p => p.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
+        public async Task<int> GetCountProductsAsync()
+        {
+            return await _db.Products.CountAsync();
         }
     }
 }
