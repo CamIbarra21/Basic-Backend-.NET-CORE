@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Prueba_productsEF.Contexts;
+using Prueba_ProductsEF.Helpers;
 using Prueba_ProductsEF.Models;
 
 public interface IUserRepository
@@ -35,8 +36,15 @@ namespace Prueba_ProductsEF.Repositories
 
         public async Task<User?> GetUserByUsernamePassword(string username, string password)
         {
-            return await _db.Users.Where(u => u.IsDeleted == false).Include(u => u.Rol)
-                .FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+            var user = await _db.Users.Where(u => u.IsDeleted == false).Include(u => u.Rol).FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null)
+                return null;
+
+            var validPassword = PasswordHelper.VerifyPassword(password, user.Password);
+            if (!validPassword)
+                return null;
+
+            return user;
         }
 
         public async Task<User?> GetUserByUsernameEmailAsync(string username, string email)

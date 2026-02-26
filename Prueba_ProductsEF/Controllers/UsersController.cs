@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Prueba_productsEF.Models;
 using Prueba_ProductsEF.Dtos;
+using Prueba_ProductsEF.Helpers;
 using Prueba_ProductsEF.Models;
 
 namespace Prueba_ProductsEF.Controllers
@@ -22,13 +23,17 @@ namespace Prueba_ProductsEF.Controllers
             var user = await _service.LogInAsync(userDto.Username, userDto.Password);
             if (user == null)
                 return NotFound(new APIResponse(false, "Invalid username or password"));
+
+            //var validPassword = PasswordHelper.HashPassword(user.Password);
             return Ok(new APIResponse(true, "Login successful", user));
         }
 
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(UserDto user)
         {
-            var newUser = await _service.RegisterAsync(user);
+            var validPassword = PasswordHelper.HashPassword(user.Password);
+
+            var newUser = await _service.RegisterAsync(user, validPassword);
             if (newUser == null)
                 return BadRequest(new APIResponse(false, "Username or email already exists"));
             return Ok(new APIResponse(true, "Registration successful", newUser));
