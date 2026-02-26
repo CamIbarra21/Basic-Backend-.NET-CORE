@@ -5,7 +5,7 @@ using Prueba_ProductsEF.Models;
 public interface IUserService
 {
     Task<UserDto?> LogInAsync(string username, string password);
-    Task<UserDto?> RegisterAsync(UserDto userDto);
+    Task<UserDto?> RegisterAsync(UserDto userDto, string hashedPassword);
     Task<IEnumerable<UserDto>> GetUsersAsync();
     Task<UserDto?> GetUserByIdAsync(int id);
     Task<UserDto?> AddUserAsync(UserDto userDto);
@@ -44,7 +44,7 @@ namespace Prueba_ProductsEF.Services
             };
         }
 
-        public async Task<UserDto?> RegisterAsync(UserDto userDto)
+        public async Task<UserDto?> RegisterAsync(UserDto userDto, string hashedPassword)
         {
             var existingUser = await _repo.GetUserByUsernameEmailAsync(userDto.Username, userDto.Email);
             if (existingUser != null)
@@ -59,7 +59,7 @@ namespace Prueba_ProductsEF.Services
                 Fullname = userDto.Fullname,
                 Username = userDto.Username,
                 Email = userDto.Email,
-                Password = userDto.Password,
+                Password = hashedPassword,
                 ProfileImage = userDto.ProfileImage,
                 RolId = rol.Id
             };
